@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .chat-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-y: scroll;
+            max-height: 300px;
+            background-color: #f9f9f9;
+        }
+
+        .user-message,
+        .bot-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .user-message {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: right;
+        }
+
+        .bot-message {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .user-input-form {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .user-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+
+        .send-button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .send-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Chatbot</h1>
+        <div id="chat-container" class="chat-container"></div>
+        <form id="user-input-form" class="user-input-form">
+            <input type="text" id="user-input" class="user-input" autocomplete="off" placeholder="Type your message here">
+            <input type="submit" value="Send" class="send-button">
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#user-input-form').on('submit', function(event) {
+                event.preventDefault();
+                var userMessage = $('#user-input').val();
+                $('#chat-container').append('<div class="user-message"><strong>You:</strong> ' + userMessage + '</div>');
+                $('#user-input').val('');
+
+                $.ajax({
+                    url: '/get_response',
+                    type: 'POST',
+                    data: { message: userMessage },
+                    success: function(response) {
+                        $('#chat-container').append('<div class="bot-message"><strong>Chatbot:</strong> ' + response + '</div>');
+                        $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
