@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import openai
 
 app = Flask(__name__)
-openai.api_key = 'your_api_key'  # Replace with your actual OpenAI API key
+openai.api_key = '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'  # Replace with your actual OpenAI API key
 
 def generate_chatbot_response(user_message):
     prompt = f'User: {user_message}\nChatbot:'
@@ -23,9 +23,9 @@ def generate_chatbot_response(user_message):
 def home():
     return render_template('index.html')
 
-@app.route('/get_response', methods=['POST'])
-def get_response():
-    user_message = request.form['message']
+@app.route('/get', methods=['POST'])
+def get_bot_response():
+    user_message = request.form['msg']
     bot_response = generate_chatbot_response(user_message)
     return bot_response
 
